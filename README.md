@@ -2,9 +2,9 @@
 
 ## Overview
 
-Bridges as used to transact across blockchains and promise a chain-agnostic future for web3. It solves the issue of interoperability across chains by allowing cross-chain transactions. These transactions utilise a bridge contract on all blockchains it supports and relays a message from a chain to another using a decentralized or centralized service in between to relay those transactions.
+Bridges are used to transact across blockchains and promise a chain-agnostic future for web3. It solves the issue of interoperability across chains by allowing cross-chain transactions. These transactions utilise a bridge contract on all blockchains it supports and relays a message from a chain to another using a decentralized or centralized service in between to relay those transactions.
 
-In this project, I have tried to create a system where we can increment counter across chains. One can create a cross-chain request on a chain A. The request is received by a relayer from chain A and is relayed to the chain B and executed which increments the counter on chain B by 1. A fee is taked from the user each time he/she creates a cross-chain request, which is sent to the Fee Manager contract. The fees can be withdrawn only by the relayer.
+In this project, I have tried to create a system where we can increment a counter across chains. One can create a cross-chain request on a chain A. The request is received by a relayer and is relayed to the chain B and executed which increments the counter on chain B by 1. A fee is taken from the user each time he/she creates a cross-chain request, which is sent to the Fee Manager contract. The fees can be withdrawn only by the relayer.
 
 ## Working
 
@@ -29,12 +29,6 @@ $ cd Simple-Messaging-Bridge
 $ yarn
 ```
 
-### To run hardhat tests
-
-```bash
-$  npx hardhat test
-```
-
 ### Fill up the .env file
 
 - Create a file named .env in the root directory of the project.
@@ -46,6 +40,12 @@ $  npx hardhat test
   - GOERLI_RPC = RPC of goerli testnet can be found on Infura or other providers
   - POLYGONSCAN_API_KEY = API key for polygonscan can be found on their website.
   - ETHERSCAN_API_KEY = API key for etherscan can be found on their website.
+
+### To run hardhat tests
+
+```bash
+$  npx hardhat test
+```
 
 ### Add Mumbai and Goerli network to metamask:
 
@@ -74,6 +74,20 @@ $  npx hardhat configure:Counter --network goerli --destchainid 80001
 Now the FeeManager, Bridge and Counter smart contracts have been deployed to Goerli and Mumbai testnets.
 The addresses to these contracts can be found in deployment/deployments.json.
 
+### Installing typescript and ts-node
+
+You can check if you have ts-node already installed by using the command:
+
+```bash
+$ ts-node --version
+```
+
+If it gives some version as output, you can skip this step. Otherwise, to install ts-node, run the following command:
+
+```bash
+$ npm install -g ts-node typescript '@types/node'
+```
+
 ### Run the Relayer
 
 Open another terminal window to run the server(relayer)
@@ -83,3 +97,7 @@ $  ts-node relayer.js
 ```
 
 Now, you can open the addresses on the respective explorers and try out the bridge.
+
+### Testing on the Explorers
+
+Go to the counter contract on one of the chains and call the send function with some amount of fees. By default, I have configured the fees to be 0.001 ether, so north of that, any amount of fees can be passed. After you have called the send function, the Bridge emits an event and the relayer catched the event emitted by the Bridge and relays the transaction to the other chain and the counter on the other chain increases by 1.
